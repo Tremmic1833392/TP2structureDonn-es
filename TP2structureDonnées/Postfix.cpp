@@ -2,68 +2,87 @@
 #include <iostream>
 #include <stack>
 #include <vector>
-#include <cctype>
-#include <stdexcept>
 
 using namespace std;
-template <element class>
-class Postfix
+
+template<class element>
+inline Postfix<element>::Postfix() {}
+
+template<class element>
+Postfix<element>::Postfix(vector<char> Tableau) : Tableau(Tableau) {}
+
+template<class element>
+Postfix<element>::~Postfix()
 {
-private:
-	Stack <element> Pile;
-	Vector <element> Tableau;
+}
 
-public:
+template<class element>
+void Postfix<element>::Valider(vector<char> Tableau)
+{
+	// Variable
+	bool valider = true;
+	regex infix_regex("^[0-9()*\\/\\-%]+$");
+	string expression(Tableau.begin(), Tableau.end());
 
-	Postfix(vector<char> Tableau) { // introduit l’expression à évaluer, à partir du clavier, dans Tableau.
-		Postfix.Tableau = Tableau;
-	};
+	if (!regex_match(expression, infix_regex)) {
+		cout << "\tL'expression est invalide !" << endl;
+		cout << "\tEntrez une expression infixée valide." << endl;
+		valider = false;
+	}
+	else {
+		cout << "L'expression est valide !" << endl;
+	}
+}
 
-	~Postfix() { // supprime le tableau et la pile si leur déclaration est dynamique (comme expliqué dansle point(2) ci - dessous.
-
-	};
-
-	Valider(vector<char> Tableau) {// valide si l’expression contenue dans Tableau ne contient que lescaractères listés ci - dessus, à savoir les nombres entiers composés de caractères nombres, et lesopérateurs(, ), *, / , %, +, et - .
-		for (int i = 0; i < Tableau.size(); i++)
-		{
-			if (Tableau[i] != '0' && Tableau[i] != '1' && Tableau[i] != '2' && Tableau[i] != '3' && Tableau[i] != '4' && Tableau[i] != '5' && Tableau[i] != '6' && Tableau[i] != '7' && Tableau[i] != '8' && Tableau[i] != '9' && Tableau[i] != '(' && Tableau[i] != ')' && Tableau[i] != '*' && Tableau[i] != '/' && Tableau[i] != '%' && Tableau[i] != '+' && Tableau[i] != '-') {
-				cout << "Expression non valide"
-					return;
-			}
+template<class element>
+bool Postfix<element>::ParenthesesEquilibrees(vector<element> Tableau)
+{
+	// Ainsi, ")(" n'est pas valide
+	stack<char> parentheseOuvrante;
+	for (char x : Tableau) {
+		if (x == '(') {
+			parentheseOuvrante.push(x);
 		}
-	};
-		bool parentheses(vector<element> Tableau) {// teste si l’expression lue contient un nombre valide de parenthèses(le nombre de parenthèses ouvrantes doit être égal au nombre de parenthèsesfermantes).
-			int countOuverte;
-			int countFermer;
-			for (int i = 0; i < Tableau.size(); i++)
-			{
-				if (Tableau[i] == '(')
-				{
-					countOuverte++;
-				}
-				else if (Tableau[i] == ')')
-				{
-					countFermer++;
-				}
+		else if (x == ')') {
+			if (parentheseOuvrante.empty()) {
+				return false; // Première parenthèse est fermante alors non valide
 			}
-			if (countOuverte == countFermer) {
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		};
-		void transformerennombres(vector <element> Tableau) { // transforme les nombres lus encaractères en valeurs numériques.
-			for (int i = 0; i < Tableau.size(); i++)
-			{
-				if (Tableau[i].isDigit()) {
+			parentheseOuvrante.pop();
+		}
+	}
+	return parentheseOuvrante.empty();
 
-				}
-			}
-		};
-		void transformerenpostfixe(stack<element> Pile, vector <element> Tableau) { // transformel’expression lue en une expression postfixée et l’afficher sur écran.
-		};
-		int evaluer_expression(stack<element> Pile, vector<element> Tableau) { // évalue l’expressionpostfixée et affiche sa valeur sur écran.
-		};
+}
+
+template<class element>
+void Postfix<element>::TransformerEnNombres(vector<element> Tableau)
+{
+}
+
+template<class element>
+void Postfix<element>::TransformerEnPostfixe(stack<element> Pile, vector<element> Tableau)
+{
+}
+
+template<class element>
+int Postfix<element>::EvaluerExpression(stack<element> Pile, vector<element> Tableau)
+{
+	return 0;
+}
+
+
+/*
+
+void transformerennombres(vector <element> Tableau) { // transforme les nombres lus encaractères en valeurs numériques.
+	for (int i = 0; i < Tableau.size(); i++)
+	{
+		if (Tableau[i].isDigit()) {
+
+		}
+	}
 };
+void transformerenpostfixe(stack<element> Pile, vector <element> Tableau) { // transformel’expression lue en une expression postfixée et l’afficher sur écran.
+};
+int evaluer_expression(stack<element> Pile, vector<element> Tableau) { // évalue l’expressionpostfixée et affiche sa valeur sur écran.
+};
+*/
