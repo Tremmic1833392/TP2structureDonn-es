@@ -57,6 +57,12 @@ bool Postfix<element>::ParenthesesEquilibrees(vector<element> Tableau)
 template<class element>
 void Postfix<element>::TransformerEnNombres(vector<element> Tableau)
 {
+	for (int i = 0; i < Tableau.size(); i++)
+	{
+		if (Tableau[i].isDigit()) {
+			Tableau[i] = stoi(string(Tableau[i]));
+		}
+	}
 }
 
 template<class element>
