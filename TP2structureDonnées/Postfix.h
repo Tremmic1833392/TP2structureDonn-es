@@ -72,6 +72,8 @@ public:
 	void TransformerEnNombres(vector <element> Tableau);
 	void TransformerEnPostfixe(stack<element> Pile, vector <element> Tableau);
 	int EvaluerExpression(stack<element> Pile, vector<element> Tableau);
+	int Postfix<element>::Priorite(char signe) {}
+
 };
 
 
