@@ -3,7 +3,7 @@
 #include <stack>
 #include <vector>
 #include <queue>
-
+#include <regex>
 #include <cctype>
 #include <stdexcept>
 
@@ -79,8 +79,9 @@ void Postfix<element>::TransformerEnNombres(vector<element> Tableau)
 template<class element>
 int Postfix<element>::Priorite(char signe)
 {
-	return (signe == "*" || "/" || "%") ? 2 :
-		(signe == "+" || "-") ? 1 :
+	return(signe == '(')? 3:
+	(signe == '*' || signe == '/' || signe == '%') ? 2 :
+		(signe == '+' || signe == '-') ? 1 :
 		0;
 }
 
@@ -88,12 +89,11 @@ template<class element>
 void Postfix<element>::TransformerEnPostfixe(stack<element> Pile, vector<element> Tableau)
 {
 	// Vatiables
-	stack<char> symboles;
 	vector<element> expressionPostfix;
 
 	for (int x = 0; x < Tableau.size(); x++)
 	{
-		if (Char.IsDigit(Tableau[x])) {
+		if (isDigit(Tableau[x])) {
 			expressionPostfix.push_back(Tableau[x]);
 		}
 		// Is symbole
@@ -110,8 +110,8 @@ void Postfix<element>::TransformerEnPostfixe(stack<element> Pile, vector<element
 				}
 				else if (Tableau[x] == ")")
 				{
-					while (pileOperateurs.top() != '(') {
-						expressionPostFix.push_back(Pile.top());
+					while (Pile.top() != '(') {
+						expressionPostfix.push_back(Pile.top());
 						Pile.pop();
 					}
 					Pile.pop();
@@ -122,7 +122,7 @@ void Postfix<element>::TransformerEnPostfixe(stack<element> Pile, vector<element
 				}
 				else
 				{
-					expressionPostFix.push_back(Pile.top());
+					expressionPostfix.push_back(Pile.top());
 					Pile.pop();
 					Pile.push(Tableau[x]);
 				}
@@ -134,6 +134,9 @@ void Postfix<element>::TransformerEnPostfixe(stack<element> Pile, vector<element
 		expressionPostfix.push_back(Pile.top());
 		Pile.pop();
 	}
+
+	Tableau = expressionPostfix; 
+	cout << Tableau;
 }
 
 template<class element>
