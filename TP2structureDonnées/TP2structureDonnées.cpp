@@ -6,24 +6,28 @@
 #include <fstream>
 #include <string>
 #include "Postfix.h"
+
 using namespace std;
 int main()
 {
     // Variables
     string expression;
-    vector<char> Tableau;
-    stack<char> Pile;
+    vector<char> tableau;
+    stack<char> pile;
 
-    cout << "Entrez une expression infixee :\n>";
+    cout << "Entrez une expression infix :\n>";     // Input de l'utilisateur pour l'expression
     getline(cin, expression);
     for (char c : expression) {
-        Tableau.push_back(c);
+        tableau.push_back(c);
     }
-    Postfix<char> postfix(Tableau);
-    postfix.Valider(Tableau);
-    postfix.ParenthesesEquilibrees(Tableau);
-    postfix.TransformerEnNombres(Tableau);
-    postfix.TransformerEnPostfixe(Pile, Tableau);
+
+    // Appel des fonctions pour valider,transfomer et evaluer l'expression donnée
+    Postfix<char> postfix(tableau);
+    postfix.valider(tableau);
+    postfix.parenthesesEquilibrees(tableau);
+    //postfix.transformerEnNombres(tableau);
+    postfix.transformerEnPostfixe(pile, tableau);
+    cout << postfix.evaluerExpression(pile, tableau);
 
 
     

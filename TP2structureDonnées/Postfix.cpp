@@ -8,31 +8,37 @@
 #include <stdexcept>
 
 using namespace std;
+template class Postfix<char>;
 
-template<class element>
-inline Postfix<element>::Postfix() {}
+// Constructeur par default
+template<class Element>
+Postfix<Element>::Postfix() {}
 
-template<class element>
-Postfix<element>::Postfix(vector<char> Tableau) : Tableau(Tableau) {}
+// Constructeur avec parametre
+template<class Element>
+Postfix<Element>::Postfix(vector<Element> Tableau) : Tableau(Tableau) {}
 
-template<class element>
-Postfix<element>::~Postfix()
+// Destructeur
+template<class Element>
+Postfix<Element>::~Postfix()
 {
 	Tableau.clear();
 }
 
-template<class element>
-void Postfix<element>::setTableau(vector<char> Tableau)
+// Setter de tableau
+template<class Element>
+void Postfix<Element>::setTableau(vector<Element> Tableau)
 {
 	this->Tableau = Tableau;
 }
 
-template<class element>
-void Postfix<element>::Valider(vector<char> Tableau)
+// Validation de l'expression fournis par l'utilisateur a l'aide d'une regex
+template<class Element>
+void Postfix<Element>::valider(vector<Element>& Tableau)
 {
 	// Variable
 	bool valider = true;
-	regex infix_regex("^[0-9()*\\/\\-%]+$");
+	regex infix_regex("^[0-9+*/()-]*$");
 	string expression(Tableau.begin(), Tableau.end());
 
 	if (!regex_match(expression, infix_regex)) {
@@ -45,8 +51,10 @@ void Postfix<element>::Valider(vector<char> Tableau)
 	}
 }
 
-template<class element>
-bool Postfix<element>::ParenthesesEquilibrees(vector<element> Tableau)
+
+// Verification des parentheses 
+template<class Element>
+bool Postfix<Element>::parenthesesEquilibrees(vector<Element>& Tableau)
 {
 	// Ainsi, ")(" n'est pas valide
 	stack<char> parentheseOuvrante;
@@ -65,50 +73,54 @@ bool Postfix<element>::ParenthesesEquilibrees(vector<element> Tableau)
 
 }
 
-template<class element>
-void Postfix<element>::TransformerEnNombres(vector<element> Tableau)
+// Tranformation des nombre(charactere) en nombre(int)
+template<class Element>
+void Postfix<Element>::transformerEnNombres(vector<Element>& Tableau)
 {
 	for (int i = 0; i < Tableau.size(); i++)
 	{
-		if (Tableau[i].isDigit()) {
-			Tableau[i] = stoi(string(Tableau[i]));
+		if (isdigit(Tableau[i]))
+		{
+			Tableau[i] = Tableau[i] - '0';
 		}
 	}
 }
 
-template<class element>
-int Postfix<element>::Priorite(char signe)
+
+// Priorote des signes pour savoir quoi faire losrque deux signe se rencontre dans le stack 
+template<class Element>
+int Postfix<Element>::priorite(char signe)
 {
-	return(signe == '(')? 3:
-	(signe == '*' || signe == '/' || signe == '%') ? 2 :
-		(signe == '+' || signe == '-') ? 1 :
+	return(signe == '(')? 3:								// Si ( retourne priorite 3
+	(signe == '*' || signe == '/' || signe == '%') ? 2 :	// Si *,/,% retourne priorite 2
+		(signe == '+' || signe == '-') ? 1 :				// Si +,- retourne priorite 1
 		0;
 }
 
-template<class element>
-void Postfix<element>::TransformerEnPostfixe(stack<element> Pile, vector<element> Tableau)
+// Transformation de l'expression entrer par l'utilisateur en postfix
+template<class Element>
+void Postfix<Element>::transformerEnPostfixe(stack<Element>& Pile, vector<Element>& Tableau)
 {
 	// Vatiables
-	vector<element> expressionPostfix;
+	vector<Element> expressionPostfix;
 
 	for (int x = 0; x < Tableau.size(); x++)
 	{
-		if (isDigit(Tableau[x])) {
+		if (isdigit(Tableau[x])) {							// Si Tableau[x] est un chiffre on le met dans l'expressionPostFix
 			expressionPostfix.push_back(Tableau[x]);
 		}
-		// Is symbole
 		else
 		{
-			if (Pile.empty() || Pile.top() == "(") {
-				Pile.push(Tableau[x]);
+			if (Pile.empty()) {					
+				Pile.push(Tableau[x]);						// Si Tableau[x] est un operateur et que le stack est empty, alors on l'ajoute au stack
 			}
 			else
 			{
-				if (Tableau[x] == "(")
+				if (Tableau[x] == '(')				
 				{
-					Pile.push(Tableau[x]);
+					Pile.push(Tableau[x]);					// Si Tableau[x] est une ( alors on l'ajoute dans le stack 
 				}
-				else if (Tableau[x] == ")")
+				else if (Tableau[x] == ')')					// Si le Tableau[x] est une ) tant que le top du stack n'est pas un (, on ajoute et pop le top du stack a expresssionPostfix
 				{
 					while (Pile.top() != '(') {
 						expressionPostfix.push_back(Pile.top());
@@ -116,52 +128,55 @@ void Postfix<element>::TransformerEnPostfixe(stack<element> Pile, vector<element
 					}
 					Pile.pop();
 				}
-				else if (Priorite(Pile.top()) > Priorite(Tableau[x]))
+				else if (priorite(Pile.top()) > priorite(Tableau[x]))		// Si c'est un operateur et que le stack n'est pas vide on verifie leurs prioriye
 				{
-					Pile.push(Tableau[x]);
+					Pile.push(Tableau[x]);										// Si la priorite dans le stack est plus haute on ajoute Tableau[x] au stack
 				}
 				else
 				{
-					expressionPostfix.push_back(Pile.top());
+					expressionPostfix.push_back(Pile.top());				// Si le top est plus petit ou égal on push le top du stack, ensuite on le pop et on push Tableau[x] dans le stack
 					Pile.pop();
 					Pile.push(Tableau[x]);
 				}
 			}
 		}
 	}
-	while (!Pile.empty())
+	while (!Pile.empty())								// Au final on push,pop le stack dans l'expressionPostfix tant qu'elle n'est pas vide			
 	{
 		expressionPostfix.push_back(Pile.top());
 		Pile.pop();
 	}
 
-	Tableau = expressionPostfix; 
-	cout << Tableau;
-}
+	Tableau = expressionPostfix;						// Affichage de l'expressionPostfix
+	cout << "Expression Postfix : ";
+	for (const auto& element : Tableau) {
+		cout << element << " ";
+	}
+	cout << endl;}
 
-template<class element>
-int Postfix<element>::EvaluerExpression(stack<element> Pile, vector<element> Tableau)
+template<class Element>
+int Postfix<Element>::evaluerExpression(stack<Element>& Pile, vector<Element>& Tableau)
 {
 	stack<int> resultat;
 	int nb1, nb2 = 0;
 
-	for (element x : Tableau) {
-		if (isdigit(x)) {
+	for (Element x : Tableau) {
+		if (isdigit(x)) {				
 			// Conversion char -> int
 			resultat.push(x - '0'); 
 		}
 		else {
 			
-			if (resultat.size() < 2) {
-				throw runtime_error("Pile contient moins de 2 éléments");
+			if (resultat.size() < 2) {													// Verification si l'expression est plus grande que 2 ex: 2+
+				throw runtime_error("Pile contient moins de 2 éléments");	
 			}
 
-			nb2 = resultat.top();
-			resultat.pop();
-			nb1 = resultat.top();
+			nb2 = resultat.top();					// Prend le top de stack et le met dans nb2 ensuite pop
+			resultat.pop();				
+			nb1 = resultat.top();					// Prend le top du stack et le met dans le nb1 ensuite pop
 			resultat.pop();
 
-			switch (x)
+			switch (x)								// Verifie qu,est ce que x repreésente commme operateur et applique l'operation nécéssaire
 			{
 			case '+':
 				resultat.push(nb1 + nb2);
@@ -180,8 +195,8 @@ int Postfix<element>::EvaluerExpression(stack<element> Pile, vector<element> Tab
 				break;
 
 			case '%':
-				if (nb2 == 0) {
-					throw runtime_error("Modulo par zéro.");
+				if (nb2 == 0) {			
+					throw runtime_error("Modulo par zéro.");	// Verification du modulo 0
 				}
 				resultat.push(nb1 % nb2);
 				break;
@@ -193,7 +208,7 @@ int Postfix<element>::EvaluerExpression(stack<element> Pile, vector<element> Tab
 	}
 
 	if (resultat.size() != 1) {
-		throw runtime_error("Expression postfixée invalide : taille finale de la pile incorrecte.");
+		throw runtime_error("Expression postfixée invalide : taille finale de la pile incorrecte.");	// Verification probleme si le resultat dépasse une taille de 1
 	}
 
 	return resultat.top();
