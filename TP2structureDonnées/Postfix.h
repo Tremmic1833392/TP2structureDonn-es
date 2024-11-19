@@ -6,28 +6,28 @@
 
 using namespace std;
 
-template <class element>
+template <class Element>
 class Postfix
 {
-    stack<element> pile_;
+    stack<Element> pile_;
     vector<char> tableau_;
 
 public:
     // Constructeur 
     Postfix(); // par defaut
-    explicit Postfix(vector<char> tableau); // avec parametres
+    explicit Postfix(const vector<char>& tableau); // avec parametres
 
     // Destructeur
     ~Postfix();
 
     // Setters
-    void setTableau(vector<char> tableau);
+    void set_tableau(const vector<char>& tableau);
 
     // Fonctions
     void valider(vector<char> tableau);
-    bool parentheses_equilibrees(vector<element> tableau);
-    void transformer_en_nombres(vector<element> tableau);
-    void transformer_en_postfixe(stack<element> pile, vector<element> tableau);
-    int evaluer_expression(stack<element> pile, vector<element> tableau);
+    bool parentheses_equilibrees(vector<Element> tableau);
+    void transformer_en_nombres(vector<Element> tableau);
+    void transformer_en_postfixe(stack<Element> pile, vector<Element> tableau);
+    int evaluer_expression(stack<Element> pile, vector<Element> tableau);
     int priorite(char signe);
 };

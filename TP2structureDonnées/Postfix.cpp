@@ -2,47 +2,46 @@
 #include <iostream>
 #include <stack>
 #include <vector>
-#include <queue>
 #include <regex>
 #include <cctype>
 #include <stdexcept>
 
 using namespace std;
 
-template <class element>
-inline Postfix<element>::Postfix()
+template <class Element>
+inline Postfix<Element>::Postfix()
 {
 }
 
-template <class element>
-Postfix<element>::Postfix(vector<char> tableau) : tableau_(tableau)
+template <class Element>
+Postfix<Element>::Postfix(const vector<char>& tableau) : tableau_(tableau)
 {
 }
 
-template <class element>
-Postfix<element>::~Postfix()
+template <class Element>
+Postfix<Element>::~Postfix()
 {
     tableau_.clear();
 }
 
-template <class element>
-void Postfix<element>::setTableau(vector<char> tableau)
+template <class Element>
+void Postfix<Element>::set_tableau(const vector<char>& tableau)
 {
-    this->Tableau = tableau;
+    tableau_ = tableau;
 }
 
-template <class element>
-void Postfix<element>::valider(vector<char> tableau)
+template <class Element>
+void Postfix<Element>::valider(vector<char> tableau)
 {
     // Variable
     bool valider = true;
-    regex infix_regex("^[0-9()*\\/\\-%]+$");
-    string expression(tableau.begin(), tableau.end());
+    const regex infix_regex("^[0-9()*\\/\\-%]+$");
+    const string expression(tableau.begin(), tableau.end());
 
     if (!regex_match(expression, infix_regex))
     {
         cout << "\tL'expression est invalide !" << endl;
-        cout << "\tEntrez une expression infix�e valide." << endl;
+        cout << "\tEntrez une expression infixee valide." << endl;
         valider = false;
     }
     else
@@ -51,31 +50,30 @@ void Postfix<element>::valider(vector<char> tableau)
     }
 }
 
-template <class element>
-bool Postfix<element>::parentheses_equilibrees(vector<element> tableau)
+template <class Element>
+bool Postfix<Element>::parentheses_equilibrees(vector<Element> tableau)
 {
-    // Ainsi, ")(" n'est pas valide
-    stack<char> parentheseOuvrante;
+    stack<char> parenthese_ouvrante;
     for (char x : tableau)
     {
         if (x == '(')
         {
-            parentheseOuvrante.push(x);
+            parenthese_ouvrante.push(x);
         }
         else if (x == ')')
         {
-            if (parentheseOuvrante.empty())
+            if (parenthese_ouvrante.empty())
             {
-                return false; // Premi�re parenth�se est fermante alors non valide
+                return false; // Premiere parenthese est fermante alors non valide
             }
-            parentheseOuvrante.pop();
+            parenthese_ouvrante.pop();
         }
     }
-    return parentheseOuvrante.empty();
+    return parenthese_ouvrante.empty();
 }
 
-template <class element>
-void Postfix<element>::transformer_en_nombres(vector<element> tableau)
+template <class Element>
+void Postfix<Element>::transformer_en_nombres(vector<Element> tableau)
 {
     for (int i = 0; i < tableau.size(); i++)
     {
@@ -86,8 +84,8 @@ void Postfix<element>::transformer_en_nombres(vector<element> tableau)
     }
 }
 
-template <class element>
-int Postfix<element>::priorite(char signe)
+template <class Element>
+int Postfix<Element>::priorite(const char signe)
 {
     return (signe == '(')
                ? 3
@@ -98,17 +96,17 @@ int Postfix<element>::priorite(char signe)
                : 0;
 }
 
-template <class element>
-void Postfix<element>::transformer_en_postfixe(stack<element> pile, vector<element> tableau)
+template <class Element>
+void Postfix<Element>::transformer_en_postfixe(stack<Element> pile, vector<Element> tableau)
 {
-    // Vatiables
-    vector<element> expressionPostfix;
+    // Variables
+    vector<Element> expression_postfix;
 
     for (int x = 0; x < tableau.size(); x++)
     {
         if (isDigit(tableau[x]))
         {
-            expressionPostfix.push_back(tableau[x]);
+            expression_postfix.push_back(tableau[x]);
         }
         // Is symbole
         else
@@ -127,7 +125,7 @@ void Postfix<element>::transformer_en_postfixe(stack<element> pile, vector<eleme
                 {
                     while (pile.top() != '(')
                     {
-                        expressionPostfix.push_back(pile.top());
+                        expression_postfix.push_back(pile.top());
                         pile.pop();
                     }
                     pile.pop();
@@ -138,7 +136,7 @@ void Postfix<element>::transformer_en_postfixe(stack<element> pile, vector<eleme
                 }
                 else
                 {
-                    expressionPostfix.push_back(pile.top());
+                    expression_postfix.push_back(pile.top());
                     pile.pop();
                     pile.push(tableau[x]);
                 }
@@ -147,21 +145,21 @@ void Postfix<element>::transformer_en_postfixe(stack<element> pile, vector<eleme
     }
     while (!pile.empty())
     {
-        expressionPostfix.push_back(pile.top());
+        expression_postfix.push_back(pile.top());
         pile.pop();
     }
 
-    tableau = expressionPostfix;
+    tableau = expression_postfix;
     cout << tableau;
 }
 
-template <class element>
-int Postfix<element>::evaluer_expression(stack<element> pile, vector<element> tableau)
+template <class Element>
+int Postfix<Element>::evaluer_expression(stack<Element> pile, vector<Element> tableau)
 {
     stack<int> resultat;
-    int nb1, nb2 = 0;
+    int nb1 = 0, nb2 = 0;
 
-    for (element x : tableau)
+    for (Element x : tableau)
     {
         if (isdigit(x))
         {

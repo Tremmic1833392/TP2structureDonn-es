@@ -7,19 +7,21 @@
 #include <string>
 #include "Postfix.h"
 using namespace std;
+
 int main()
 {
     // Variables
     string expression;
-    vector<char> Tableau;
-    stack<char> Pile;
+    vector<char> tableau;
+    stack<char> pile;
 
     cout << "Entrez une expression infixee :\n>";
     getline(cin, expression);
-    for (char c : expression) {
-        Tableau.push_back(c);
+    for (char c : expression)
+    {
+        tableau.push_back(c);
     }
-    
+
     /*
     Postfix<char> postfix(Tableau);
     postfix.Valider(Tableau);
@@ -28,6 +30,6 @@ int main()
     postfix.TransformerEnPostfixe(Pile, Tableau);
 */
 
-    
+
     return 0;
 }
