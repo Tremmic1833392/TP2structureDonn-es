@@ -29,18 +29,6 @@ Objectifs principaux : Le devoir consiste à écrire un programme C++ qui fait d
 En gros, ce devoir demande d'implémenter un système pour lire, transformer et évaluer des expressions mathématiques en respectant des règles de priorité et d'écriture postfixée. Tu vas beaucoup utiliser les piles (stack) pour gérer la transformation et l’évaluation de ces expressions.
 */
 
-template <class MyType>
-class MyClass {
-public:
-    MyType first;
-    MyType second;
-
-    MyClass(MyType f, MyType s) {
-        first = f;
-        second = s;
-    }
-};
-
 int main()
 {
     // Variables
@@ -51,13 +39,6 @@ int main()
     cout << "Entrez une expression infixee :\n>";
     getline(cin, expression);
 
-    // Use MyClass with strings
-    MyClass<string> stringObj("Hello", "World");
-    cout << stringObj.first << " " << stringObj.second << "\n";
-
-    // Use MyClass with integers
-    MyClass<int> intObj(4, 5);
-    cout << intObj.first << " " << intObj.second << "\n";
 
     
     return 0;
