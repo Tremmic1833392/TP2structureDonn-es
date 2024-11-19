@@ -73,12 +73,16 @@ void Postfix<element>::TransformerEnNombres(vector<element> Tableau)
 
 template<class element>
 int Postfix<element>::Priorite(char signe) {
-	 if (signe == "*" || "/" || "%")
+	if (signe == '(')
+	{
+		return 3;
+	}
+	 if (signe == '*' ||  '/' || '%')
 	{
 		return 2;
 	}
-	else if (signe == "+" || "-")
-	{
+	else if (signe == '+' || '-')
+	{	
 		return 1;
 	}
 	return 0;
@@ -131,6 +135,9 @@ void Postfix<element>::TransformerEnPostfixe(stack<element> Pile, vector<element
 		expressionPostfix.push_back(Pile.top());
 		Pile.pop();
 	}
+
+	Tableau = expressionPostfix; 
+	cout << Tableau;
 }
 
 template<class element>
