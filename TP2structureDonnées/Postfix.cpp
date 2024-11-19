@@ -8,8 +8,10 @@
 
 using namespace std;
 
+template class Postfix<char>;
+
 template <class Element>
-inline Postfix<Element>::Postfix()
+Postfix<Element>::Postfix()
 {
 }
 
@@ -17,9 +19,15 @@ template <class Element>
 Postfix<Element>::Postfix(const vector<char>& tableau) : tableau_(tableau)
 {
 }
-
+/*
 template <class Element>
 Postfix<Element>::~Postfix()
+{
+    tableau_.clear();
+}
+*/
+//template <>
+Postfix<char>::~Postfix()
 {
     tableau_.clear();
 }
@@ -77,9 +85,9 @@ void Postfix<Element>::transformer_en_nombres(vector<Element> tableau)
 {
     for (int i = 0; i < tableau.size(); i++)
     {
-        if (tableau[i].isDigit())
+        if (isdigit(tableau[i]))
         {
-            tableau[i] = stoi(string(tableau[i]));
+            tableau[i] = stoi(string(1, tableau[i]));
         }
     }
 }
@@ -104,24 +112,24 @@ void Postfix<Element>::transformer_en_postfixe(stack<Element> pile, vector<Eleme
 
     for (int x = 0; x < tableau.size(); x++)
     {
-        if (isDigit(tableau[x]))
+        if (isdigit(tableau[x]))
         {
             expression_postfix.push_back(tableau[x]);
         }
         // Is symbole
         else
         {
-            if (pile.empty() || pile.top() == "(")
+            if (pile.empty() || pile.top() == '(')
             {
                 pile.push(tableau[x]);
             }
             else
             {
-                if (tableau[x] == "(")
+                if (tableau[x] == '(')
                 {
                     pile.push(tableau[x]);
                 }
-                else if (tableau[x] == ")")
+                else if (tableau[x] == ')')
                 {
                     while (pile.top() != '(')
                     {
@@ -130,7 +138,7 @@ void Postfix<Element>::transformer_en_postfixe(stack<Element> pile, vector<Eleme
                     }
                     pile.pop();
                 }
-                else if (Priorite(pile.top()) > Priorite(tableau[x]))
+                else if (priorite(pile.top()) > priorite(tableau[x]))
                 {
                     pile.push(tableau[x]);
                 }
@@ -150,7 +158,7 @@ void Postfix<Element>::transformer_en_postfixe(stack<Element> pile, vector<Eleme
     }
 
     tableau = expression_postfix;
-    cout << tableau;
+    //cout << tableau; // '<<' binaire    : aucun opérateur trouvé qui accepte un opérande de partie droite de type 'vector<char,allocator<char>>' (ou il n'existe pas de conversion acceptable)
 }
 
 template <class Element>
@@ -217,3 +225,5 @@ int Postfix<Element>::evaluer_expression(stack<Element> pile, vector<Element> ta
 
     return resultat.top();
 }
+
+
