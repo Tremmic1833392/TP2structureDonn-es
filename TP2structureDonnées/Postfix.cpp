@@ -2,6 +2,10 @@
 #include <iostream>
 #include <stack>
 #include <vector>
+#include <queue>
+
+#include <cctype>
+#include <stdexcept>
 
 using namespace std;
 
@@ -14,6 +18,7 @@ Postfix<element>::Postfix(vector<char> Tableau) : Tableau(Tableau) {}
 template<class element>
 Postfix<element>::~Postfix()
 {
+	Tableau.clear();
 }
 
 template<class element>
@@ -72,56 +77,54 @@ void Postfix<element>::TransformerEnNombres(vector<element> Tableau)
 }
 
 template<class element>
-int Postfix<element>::Priorite(char signe) {
-	 if (signe == "*" || "/" || "%")
-	{
-		return 2;
-	}
-	else if (signe == "+" || "-")
-	{
-		return 1;
-	}
-	return 0;
+int Postfix<element>::Priorite(char signe)
+{
+	return (signe == "*" || "/" || "%") ? 2 :
+		(signe == "+" || "-") ? 1 :
+		0;
 }
 
 template<class element>
 void Postfix<element>::TransformerEnPostfixe(stack<element> Pile, vector<element> Tableau)
 {
+	// Vatiables
+	stack<char> symboles;
 	vector<element> expressionPostfix;
 
-	for (int i = 0; i < Tableau.size(); i++)
+	for (int x = 0; x < Tableau.size(); x++)
 	{
-		if (Tableau[i].isDigit())
-		{
-			expressionPostfix.push_back();
+		if (Char.IsDigit(Tableau[x])) {
+			expressionPostfix.push_back(Tableau[x]);
 		}
+		// Is symbole
 		else
 		{
 			if (Pile.empty() || Pile.top() == "(") {
-				Pile.push(Tableau[i]);
+				Pile.push(Tableau[x]);
 			}
 			else
 			{
-				if (Tableau[i] == "(")
+				if (Tableau[x] == "(")
 				{
-					Pile.push(Tableau[i]);
+					Pile.push(Tableau[x]);
 				}
-				else if (Tableau[i] == ")")
+				else if (Tableau[x] == ")")
 				{
 					while (pileOperateurs.top() != '(') {
 						expressionPostFix.push_back(Pile.top());
 						Pile.pop();
 					}
+					Pile.pop();
 				}
-				else if (Priorite(Pile.top()) > Priorite(Tableau[i]))
+				else if (Priorite(Pile.top()) > Priorite(Tableau[x]))
 				{
-					Pile.push(Tableau[i]);
+					Pile.push(Tableau[x]);
 				}
 				else
 				{
 					expressionPostFix.push_back(Pile.top());
 					Pile.pop();
-					Pile.push(Tableau[i]);
+					Pile.push(Tableau[x]);
 				}
 			}
 		}
@@ -136,5 +139,59 @@ void Postfix<element>::TransformerEnPostfixe(stack<element> Pile, vector<element
 template<class element>
 int Postfix<element>::EvaluerExpression(stack<element> Pile, vector<element> Tableau)
 {
-	return 0;
+	stack<int> resultat;
+	int nb1, nb2 = 0;
+
+	for (element x : Tableau) {
+		if (isdigit(x)) {
+			// Conversion char -> int
+			resultat.push(x - '0'); 
+		}
+		else {
+			
+			if (resultat.size() < 2) {
+				throw runtime_error("Pile contient moins de 2 éléments");
+			}
+
+			nb2 = resultat.top();
+			resultat.pop();
+			nb1 = resultat.top();
+			resultat.pop();
+
+			switch (x)
+			{
+			case '+':
+				resultat.push(nb1 + nb2);
+				break;
+
+			case '-':
+				resultat.push(nb1 - nb2);
+				break;
+
+			case '*':
+				resultat.push(nb1 * nb2);
+				break;
+
+			case '/':
+				resultat.push(nb1 / nb2);
+				break;
+
+			case '%':
+				if (nb2 == 0) {
+					throw runtime_error("Modulo par zéro.");
+				}
+				resultat.push(nb1 % nb2);
+				break;
+
+			default:
+				throw runtime_error("Opérateur non supporté.");
+			}
+		}
+	}
+
+	if (resultat.size() != 1) {
+		throw runtime_error("Expression postfixée invalide : taille finale de la pile incorrecte.");
+	}
+
+	return resultat.top();
 }
