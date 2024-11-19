@@ -10,7 +10,7 @@ class Postfix
 {
 private:
 	stack<element> Pile;
-	vector<string> Tableau;
+	vector<char> Tableau;
 
 public:
 

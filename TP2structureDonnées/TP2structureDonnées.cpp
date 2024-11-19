@@ -11,7 +11,7 @@ int main()
 {
     // Variables
     string expression;
-    Postfix<string> expressionInfixee();
+    Postfix<char> expressionInfixee();
     vector<char> Tableau;
     stack<char> Pile;
 
