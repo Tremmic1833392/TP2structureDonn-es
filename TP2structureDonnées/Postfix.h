@@ -5,32 +5,29 @@
 #include <vector>
 
 using namespace std;
+
 template <class element>
 class Postfix
 {
-private:
-	stack<element> Pile;
-	vector<char> Tableau;
+    stack<element> pile_;
+    vector<char> tableau_;
 
 public:
+    // Constructeur 
+    Postfix(); // par defaut
+    explicit Postfix(vector<char> tableau); // avec parametres
 
-	// Constructeur 
-	Postfix();						// par d�faut
-	Postfix(vector<char> Tableau);	// avec param�tres
+    // Destructeur
+    ~Postfix();
 
-	// Destructeur
-	~Postfix();
+    // Setters
+    void setTableau(vector<char> tableau);
 
-	// Setters
-	void setTableau(vector<char> Tableau);
-
-	// Fonctions
-	void Valider(vector<char> Tableau);
-	bool ParenthesesEquilibrees(vector<element> Tableau);
-	void TransformerEnNombres(vector <element> Tableau);
-	void TransformerEnPostfixe(stack<element> Pile, vector <element> Tableau);
-	int EvaluerExpression(stack<element> Pile, vector<element> Tableau);
-	int Priorite(char signe);
+    // Fonctions
+    void valider(vector<char> tableau);
+    bool parentheses_equilibrees(vector<element> tableau);
+    void transformer_en_nombres(vector<element> tableau);
+    void transformer_en_postfixe(stack<element> pile, vector<element> tableau);
+    int evaluer_expression(stack<element> pile, vector<element> tableau);
+    int priorite(char signe);
 };
-
-

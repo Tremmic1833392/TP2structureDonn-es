@@ -19,12 +19,14 @@ int main()
     for (char c : expression) {
         Tableau.push_back(c);
     }
+    
+    /*
     Postfix<char> postfix(Tableau);
     postfix.Valider(Tableau);
     postfix.ParenthesesEquilibrees(Tableau);
     postfix.TransformerEnNombres(Tableau);
     postfix.TransformerEnPostfixe(Pile, Tableau);
-
+*/
 
     
     return 0;
