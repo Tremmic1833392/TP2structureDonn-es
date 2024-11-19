@@ -67,6 +67,10 @@ public:
 	// Destructeur
 	~Postfix();
 
+	// Setters
+	void setTableau(vector<char> Tableau);
+
+	// Fonctions
 	void Valider(vector<char> Tableau);
 	bool ParenthesesEquilibrees(vector<element> Tableau);
 	void TransformerEnNombres(vector <element> Tableau);

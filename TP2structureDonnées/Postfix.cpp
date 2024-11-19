@@ -17,6 +17,12 @@ Postfix<element>::~Postfix()
 }
 
 template<class element>
+void Postfix<element>::setTableau(vector<char> Tableau)
+{
+	this->Tableau = Tableau;
+}
+
+template<class element>
 void Postfix<element>::Valider(vector<char> Tableau)
 {
 	// Variable
@@ -57,11 +63,18 @@ bool Postfix<element>::ParenthesesEquilibrees(vector<element> Tableau)
 template<class element>
 void Postfix<element>::TransformerEnNombres(vector<element> Tableau)
 {
+	for (int i = 0; i < Tableau.size(); i++)
+	{
+		if (Tableau[i].isDigit()) {
+
+		}
+	}
 }
 
 template<class element>
 void Postfix<element>::TransformerEnPostfixe(stack<element> Pile, vector<element> Tableau)
 {
+	
 }
 
 template<class element>
@@ -69,20 +82,3 @@ int Postfix<element>::EvaluerExpression(stack<element> Pile, vector<element> Tab
 {
 	return 0;
 }
-
-
-/*
-
-void transformerennombres(vector <element> Tableau) { // transforme les nombres lus encaractères en valeurs numériques.
-	for (int i = 0; i < Tableau.size(); i++)
-	{
-		if (Tableau[i].isDigit()) {
-
-		}
-	}
-};
-void transformerenpostfixe(stack<element> Pile, vector <element> Tableau) { // transformel’expression lue en une expression postfixée et l’afficher sur écran.
-};
-int evaluer_expression(stack<element> Pile, vector<element> Tableau) { // évalue l’expressionpostfixée et affiche sa valeur sur écran.
-};
-*/
