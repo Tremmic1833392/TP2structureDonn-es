@@ -5,9 +5,11 @@
 #include <regex>
 #include <fstream>
 #include <string>
+
 #include "Postfix.h"
 
 using namespace std;
+
 int main()
 {
     // Variables

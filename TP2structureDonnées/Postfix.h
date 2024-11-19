@@ -13,13 +13,16 @@ private:
 	vector<Element> Tableau;
 
 public:
+    // Constructeur 
+    Postfix(); // par defaut
+    explicit Postfix(const vector<char>& tableau); // avec parametres
 
 	// Constructeur 
 	Postfix();						// par d�faut
 	Postfix(vector<Element> Tableau);	// avec param�tres
 
-	// Destructeur
-	~Postfix();
+    // Setters
+    void set_tableau(const vector<char>& tableau);
 
 	// Setters
 	void setTableau(vector<Element> Tableau);
@@ -32,5 +35,3 @@ public:
 	int evaluerExpression(stack<Element>& Pile, vector<Element>& Tableau);			// evaluer l'expreession postfixe	
 	int priorite(char signe);														// Donner les priorite des operations pour la transformation
 };
-
-

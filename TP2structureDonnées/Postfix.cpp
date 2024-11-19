@@ -2,7 +2,6 @@
 #include <iostream>
 #include <stack>
 #include <vector>
-#include <queue>
 #include <regex>
 #include <cctype>
 #include <stdexcept>
@@ -22,14 +21,25 @@ Postfix<Element>::Postfix(vector<Element> Tableau) : Tableau(Tableau) {}
 template<class Element>
 Postfix<Element>::~Postfix()
 {
-	Tableau.clear();
+}
+/*
+template <class Element>
+Postfix<Element>::~Postfix()
+{
+    tableau_.clear();
+}
+*/
+//template <>
+Postfix<char>::~Postfix()
+{
+    tableau_.clear();
 }
 
 // Setter de tableau
 template<class Element>
 void Postfix<Element>::setTableau(vector<Element> Tableau)
 {
-	this->Tableau = Tableau;
+    tableau_ = tableau;
 }
 
 // Validation de l'expression fournis par l'utilisateur a l'aide d'une regex
@@ -41,14 +51,16 @@ void Postfix<Element>::valider(vector<Element>& Tableau)
 	regex infix_regex("^[0-9+*/()-]*$");
 	string expression(Tableau.begin(), Tableau.end());
 
-	if (!regex_match(expression, infix_regex)) {
-		cout << "\tL'expression est invalide !" << endl;
-		cout << "\tEntrez une expression infix�e valide." << endl;
-		valider = false;
-	}
-	else {
-		cout << "L'expression est valide !" << endl;
-	}
+    if (!regex_match(expression, infix_regex))
+    {
+        cout << "\tL'expression est invalide !" << endl;
+        cout << "\tEntrez une expression infixee valide." << endl;
+        valider = false;
+    }
+    else
+    {
+        cout << "L'expression est valide !" << endl;
+    }
 }
 
 
@@ -56,21 +68,23 @@ void Postfix<Element>::valider(vector<Element>& Tableau)
 template<class Element>
 bool Postfix<Element>::parenthesesEquilibrees(vector<Element>& Tableau)
 {
-	// Ainsi, ")(" n'est pas valide
-	stack<char> parentheseOuvrante;
-	for (char x : Tableau) {
-		if (x == '(') {
-			parentheseOuvrante.push(x);
-		}
-		else if (x == ')') {
-			if (parentheseOuvrante.empty()) {
-				return false; // Premi�re parenth�se est fermante alors non valide
-			}
-			parentheseOuvrante.pop();
-		}
-	}
-	return parentheseOuvrante.empty();
-
+    stack<char> parenthese_ouvrante;
+    for (char x : tableau)
+    {
+        if (x == '(')
+        {
+            parenthese_ouvrante.push(x);
+        }
+        else if (x == ')')
+        {
+            if (parenthese_ouvrante.empty())
+            {
+                return false; // Premiere parenthese est fermante alors non valide
+            }
+            parenthese_ouvrante.pop();
+        }
+    }
+    return parenthese_ouvrante.empty();
 }
 
 // Tranformation des nombre(charactere) en nombre(int)
@@ -157,8 +171,8 @@ void Postfix<Element>::transformerEnPostfixe(stack<Element>& Pile, vector<Elemen
 template<class Element>
 int Postfix<Element>::evaluerExpression(stack<Element>& Pile, vector<Element>& Tableau)
 {
-	stack<int> resultat;
-	int nb1, nb2 = 0;
+    stack<int> resultat;
+    int nb1 = 0, nb2 = 0;
 
 	for (Element x : Tableau) {
 		if (isdigit(x)) {				
@@ -182,18 +196,25 @@ int Postfix<Element>::evaluerExpression(stack<Element>& Pile, vector<Element>& T
 				resultat.push(nb1 + nb2);
 				break;
 
-			case '-':
-				resultat.push(nb1 - nb2);
-				break;
+            case '-':
+                resultat.push(nb1 - nb2);
+                break;
 
-			case '*':
-				resultat.push(nb1 * nb2);
-				break;
+            case '*':
+                resultat.push(nb1 * nb2);
+                break;
 
-			case '/':
-				resultat.push(nb1 / nb2);
-				break;
+            case '/':
+                resultat.push(nb1 / nb2);
+                break;
 
+            case '%':
+                if (nb2 == 0)
+                {
+                    throw runtime_error("Modulo par zéro.");
+                }
+                resultat.push(nb1 % nb2);
+                break;
 			case '%':
 				if (nb2 == 0) {			
 					throw runtime_error("Modulo par zéro.");	// Verification du modulo 0
@@ -201,15 +222,21 @@ int Postfix<Element>::evaluerExpression(stack<Element>& Pile, vector<Element>& T
 				resultat.push(nb1 % nb2);
 				break;
 
-			default:
-				throw runtime_error("Opérateur non supporté.");
-			}
-		}
-	}
+            default:
+                throw runtime_error("Opérateur non supporté.");
+            }
+        }
+    }
 
+    if (resultat.size() != 1)
+    {
+        throw runtime_error("Expression postfixée invalide : taille finale de la pile incorrecte.");
+    }
 	if (resultat.size() != 1) {
 		throw runtime_error("Expression postfixée invalide : taille finale de la pile incorrecte.");	// Verification probleme si le resultat dépasse une taille de 1
 	}
 
-	return resultat.top();
+    return resultat.top();
 }
+
+
