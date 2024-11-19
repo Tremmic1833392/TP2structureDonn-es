@@ -17,6 +17,12 @@ Postfix<element>::~Postfix()
 }
 
 template<class element>
+void Postfix<element>::setTableau(vector<char> Tableau)
+{
+	this->Tableau = Tableau;
+}
+
+template<class element>
 void Postfix<element>::Valider(vector<char> Tableau)
 {
 	// Variable
@@ -26,7 +32,7 @@ void Postfix<element>::Valider(vector<char> Tableau)
 
 	if (!regex_match(expression, infix_regex)) {
 		cout << "\tL'expression est invalide !" << endl;
-		cout << "\tEntrez une expression infixée valide." << endl;
+		cout << "\tEntrez une expression infixï¿½e valide." << endl;
 		valider = false;
 	}
 	else {
@@ -45,7 +51,7 @@ bool Postfix<element>::ParenthesesEquilibrees(vector<element> Tableau)
 		}
 		else if (x == ')') {
 			if (parentheseOuvrante.empty()) {
-				return false; // Première parenthèse est fermante alors non valide
+				return false; // Premiï¿½re parenthï¿½se est fermante alors non valide
 			}
 			parentheseOuvrante.pop();
 		}
@@ -132,20 +138,3 @@ int Postfix<element>::EvaluerExpression(stack<element> Pile, vector<element> Tab
 {
 	return 0;
 }
-
-
-/*
-
-void transformerennombres(vector <element> Tableau) { // transforme les nombres lus encaractères en valeurs numériques.
-	for (int i = 0; i < Tableau.size(); i++)
-	{
-		if (Tableau[i].isDigit()) {
-
-		}
-	}
-};
-void transformerenpostfixe(stack<element> Pile, vector <element> Tableau) { // transformel’expression lue en une expression postfixée et l’afficher sur écran.
-};
-int evaluer_expression(stack<element> Pile, vector<element> Tableau) { // évalue l’expressionpostfixée et affiche sa valeur sur écran.
-};
-*/

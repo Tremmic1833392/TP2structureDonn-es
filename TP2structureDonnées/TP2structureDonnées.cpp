@@ -44,10 +44,12 @@ public:
 int main()
 {
     // Variables
-    string expressionInfixee;
+    string expression;
+    Postfix<string> expressionInfixee();
+    vector<char> Tableau;
 
     cout << "Entrez une expression infixee :\n>";
-    getline(cin, expressionInfixee);
+    getline(cin, expression);
 
     // Use MyClass with strings
     MyClass<string> stringObj("Hello", "World");
@@ -57,5 +59,6 @@ int main()
     MyClass<int> intObj(4, 5);
     cout << intObj.first << " " << intObj.second << "\n";
 
+    
     return 0;
 }
