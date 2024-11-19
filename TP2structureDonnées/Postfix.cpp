@@ -32,7 +32,7 @@ void Postfix<element>::Valider(vector<char> Tableau)
 
 	if (!regex_match(expression, infix_regex)) {
 		cout << "\tL'expression est invalide !" << endl;
-		cout << "\tEntrez une expression infixée valide." << endl;
+		cout << "\tEntrez une expression infixï¿½e valide." << endl;
 		valider = false;
 	}
 	else {
@@ -51,7 +51,7 @@ bool Postfix<element>::ParenthesesEquilibrees(vector<element> Tableau)
 		}
 		else if (x == ')') {
 			if (parentheseOuvrante.empty()) {
-				return false; // Première parenthèse est fermante alors non valide
+				return false; // Premiï¿½re parenthï¿½se est fermante alors non valide
 			}
 			parentheseOuvrante.pop();
 		}
@@ -66,15 +66,71 @@ void Postfix<element>::TransformerEnNombres(vector<element> Tableau)
 	for (int i = 0; i < Tableau.size(); i++)
 	{
 		if (Tableau[i].isDigit()) {
-
+			Tableau[i] = stoi(string(Tableau[i]));
 		}
 	}
 }
 
 template<class element>
+int Postfix<element>::Priorite(char signe) {
+	 if (signe == "*" || "/" || "%")
+	{
+		return 2;
+	}
+	else if (signe == "+" || "-")
+	{
+		return 1;
+	}
+	return 0;
+}
+
+template<class element>
 void Postfix<element>::TransformerEnPostfixe(stack<element> Pile, vector<element> Tableau)
 {
-	
+	vector<element> expressionPostfix;
+
+	for (int i = 0; i < Tableau.size(); i++)
+	{
+		if (Tableau[i].isDigit())
+		{
+			expressionPostfix.push_back();
+		}
+		else
+		{
+			if (Pile.empty() || Pile.top() == "(") {
+				Pile.push(Tableau[i]);
+			}
+			else
+			{
+				if (Tableau[i] == "(")
+				{
+					Pile.push(Tableau[i]);
+				}
+				else if (Tableau[i] == ")")
+				{
+					while (pileOperateurs.top() != '(') {
+						expressionPostFix.push_back(Pile.top());
+						Pile.pop();
+					}
+				}
+				else if (Priorite(Pile.top()) > Priorite(Tableau[i]))
+				{
+					Pile.push(Tableau[i]);
+				}
+				else
+				{
+					expressionPostFix.push_back(Pile.top());
+					Pile.pop();
+					Pile.push(Tableau[i]);
+				}
+			}
+		}
+	}
+	while (!Pile.empty())
+	{
+		expressionPostfix.push_back(Pile.top());
+		Pile.pop();
+	}
 }
 
 template<class element>
