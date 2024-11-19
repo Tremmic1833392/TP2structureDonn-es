@@ -31,7 +31,6 @@ public:
 	void TransformerEnPostfixe(stack<element> Pile, vector <element> Tableau);
 	int EvaluerExpression(stack<element> Pile, vector<element> Tableau);
 	int Priorite(char signe);
-
 };
 
 
