@@ -9,7 +9,6 @@
 #include "Postfix.h"
 
 using namespace std;
-
 int main()
 {
     // Variables
@@ -32,6 +31,6 @@ int main()
     cout << postfix.evaluerExpression(pile, tableau);
 
 
-    
+
     return 0;
 }

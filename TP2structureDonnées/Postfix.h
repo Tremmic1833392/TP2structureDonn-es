@@ -13,16 +13,13 @@ private:
 	vector<Element> Tableau;
 
 public:
-    // Constructeur 
-    Postfix(); // par defaut
-    explicit Postfix(const vector<char>& tableau); // avec parametres
 
 	// Constructeur 
 	Postfix();						// par d�faut
 	Postfix(vector<Element> Tableau);	// avec param�tres
 
-    // Setters
-    void set_tableau(const vector<char>& tableau);
+	// Destructeur
+	~Postfix();
 
 	// Setters
 	void setTableau(vector<Element> Tableau);

@@ -9,6 +9,8 @@
 using namespace std;
 template class Postfix<char>;
 
+template class Postfix<char>;
+
 // Constructeur par default
 template<class Element>
 Postfix<Element>::Postfix() {}
@@ -21,25 +23,14 @@ Postfix<Element>::Postfix(vector<Element> Tableau) : Tableau(Tableau) {}
 template<class Element>
 Postfix<Element>::~Postfix()
 {
-}
-/*
-template <class Element>
-Postfix<Element>::~Postfix()
-{
-    tableau_.clear();
-}
-*/
-//template <>
-Postfix<char>::~Postfix()
-{
-    tableau_.clear();
+	Tableau.clear();
 }
 
 // Setter de tableau
 template<class Element>
 void Postfix<Element>::setTableau(vector<Element> Tableau)
 {
-    tableau_ = tableau;
+	this->Tableau = Tableau;
 }
 
 // Validation de l'expression fournis par l'utilisateur a l'aide d'une regex
@@ -51,16 +42,14 @@ void Postfix<Element>::valider(vector<Element>& Tableau)
 	regex infix_regex("^[0-9+*/()-]*$");
 	string expression(Tableau.begin(), Tableau.end());
 
-    if (!regex_match(expression, infix_regex))
-    {
-        cout << "\tL'expression est invalide !" << endl;
-        cout << "\tEntrez une expression infixee valide." << endl;
-        valider = false;
-    }
-    else
-    {
-        cout << "L'expression est valide !" << endl;
-    }
+	if (!regex_match(expression, infix_regex)) {
+		cout << "\tL'expression est invalide !" << endl;
+		cout << "\tEntrez une expression infix�e valide." << endl;
+		valider = false;
+	}
+	else {
+		cout << "L'expression est valide !" << endl;
+	}
 }
 
 
@@ -68,23 +57,21 @@ void Postfix<Element>::valider(vector<Element>& Tableau)
 template<class Element>
 bool Postfix<Element>::parenthesesEquilibrees(vector<Element>& Tableau)
 {
-    stack<char> parenthese_ouvrante;
-    for (char x : tableau)
-    {
-        if (x == '(')
-        {
-            parenthese_ouvrante.push(x);
-        }
-        else if (x == ')')
-        {
-            if (parenthese_ouvrante.empty())
-            {
-                return false; // Premiere parenthese est fermante alors non valide
-            }
-            parenthese_ouvrante.pop();
-        }
-    }
-    return parenthese_ouvrante.empty();
+	// Ainsi, ")(" n'est pas valide
+	stack<char> parentheseOuvrante;
+	for (char x : Tableau) {
+		if (x == '(') {
+			parentheseOuvrante.push(x);
+		}
+		else if (x == ')') {
+			if (parentheseOuvrante.empty()) {
+				return false; // Premi�re parenth�se est fermante alors non valide
+			}
+			parentheseOuvrante.pop();
+		}
+	}
+	return parentheseOuvrante.empty();
+
 }
 
 // Tranformation des nombre(charactere) en nombre(int)
@@ -105,8 +92,8 @@ void Postfix<Element>::transformerEnNombres(vector<Element>& Tableau)
 template<class Element>
 int Postfix<Element>::priorite(char signe)
 {
-	return(signe == '(')? 3:								// Si ( retourne priorite 3
-	(signe == '*' || signe == '/' || signe == '%') ? 2 :	// Si *,/,% retourne priorite 2
+	return(signe == '(') ? 3 :								// Si ( retourne priorite 3
+		(signe == '*' || signe == '/' || signe == '%') ? 2 :	// Si *,/,% retourne priorite 2
 		(signe == '+' || signe == '-') ? 1 :				// Si +,- retourne priorite 1
 		0;
 }
@@ -125,12 +112,12 @@ void Postfix<Element>::transformerEnPostfixe(stack<Element>& Pile, vector<Elemen
 		}
 		else
 		{
-			if (Pile.empty()) {					
+			if (Pile.empty()) {
 				Pile.push(Tableau[x]);						// Si Tableau[x] est un operateur et que le stack est empty, alors on l'ajoute au stack
 			}
 			else
 			{
-				if (Tableau[x] == '(')				
+				if (Tableau[x] == '(')
 				{
 					Pile.push(Tableau[x]);					// Si Tableau[x] est une ( alors on l'ajoute dans le stack 
 				}
@@ -166,27 +153,28 @@ void Postfix<Element>::transformerEnPostfixe(stack<Element>& Pile, vector<Elemen
 	for (const auto& element : Tableau) {
 		cout << element << " ";
 	}
-	cout << endl;}
+	cout << endl;
+}
 
 template<class Element>
 int Postfix<Element>::evaluerExpression(stack<Element>& Pile, vector<Element>& Tableau)
 {
-    stack<int> resultat;
-    int nb1 = 0, nb2 = 0;
+	stack<int> resultat;
+	int nb1, nb2 = 0;
 
 	for (Element x : Tableau) {
-		if (isdigit(x)) {				
+		if (isdigit(x)) {
 			// Conversion char -> int
-			resultat.push(x - '0'); 
+			resultat.push(x - '0');
 		}
 		else {
-			
+
 			if (resultat.size() < 2) {													// Verification si l'expression est plus grande que 2 ex: 2+
-				throw runtime_error("Pile contient moins de 2 éléments");	
+				throw runtime_error("Pile contient moins de 2 éléments");
 			}
 
 			nb2 = resultat.top();					// Prend le top de stack et le met dans nb2 ensuite pop
-			resultat.pop();				
+			resultat.pop();
 			nb1 = resultat.top();					// Prend le top du stack et le met dans le nb1 ensuite pop
 			resultat.pop();
 
@@ -196,47 +184,34 @@ int Postfix<Element>::evaluerExpression(stack<Element>& Pile, vector<Element>& T
 				resultat.push(nb1 + nb2);
 				break;
 
-            case '-':
-                resultat.push(nb1 - nb2);
-                break;
+			case '-':
+				resultat.push(nb1 - nb2);
+				break;
 
-            case '*':
-                resultat.push(nb1 * nb2);
-                break;
+			case '*':
+				resultat.push(nb1 * nb2);
+				break;
 
-            case '/':
-                resultat.push(nb1 / nb2);
-                break;
+			case '/':
+				resultat.push(nb1 / nb2);
+				break;
 
-            case '%':
-                if (nb2 == 0)
-                {
-                    throw runtime_error("Modulo par zéro.");
-                }
-                resultat.push(nb1 % nb2);
-                break;
 			case '%':
-				if (nb2 == 0) {			
+				if (nb2 == 0) {
 					throw runtime_error("Modulo par zéro.");	// Verification du modulo 0
 				}
 				resultat.push(nb1 % nb2);
 				break;
 
-            default:
-                throw runtime_error("Opérateur non supporté.");
-            }
-        }
-    }
+			default:
+				throw runtime_error("Opérateur non supporté.");
+			}
+		}
+	}
 
-    if (resultat.size() != 1)
-    {
-        throw runtime_error("Expression postfixée invalide : taille finale de la pile incorrecte.");
-    }
 	if (resultat.size() != 1) {
 		throw runtime_error("Expression postfixée invalide : taille finale de la pile incorrecte.");	// Verification probleme si le resultat dépasse une taille de 1
 	}
 
-    return resultat.top();
+	return resultat.top();
 }
-
-
