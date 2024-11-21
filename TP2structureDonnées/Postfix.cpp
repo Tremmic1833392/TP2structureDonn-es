@@ -134,18 +134,4 @@ int Postfix<element>::EvaluerExpression(stack<element> Pile, vector<element> Tab
 }
 
 
-/*
 
-void transformerennombres(vector <element> Tableau) { // transforme les nombres lus encaractères en valeurs numériques.
-	for (int i = 0; i < Tableau.size(); i++)
-	{
-		if (Tableau[i].isDigit()) {
-
-		}
-	}
-};
-void transformerenpostfixe(stack<element> Pile, vector <element> Tableau) { // transformel’expression lue en une expression postfixée et l’afficher sur écran.
-};
-int evaluer_expression(stack<element> Pile, vector<element> Tableau) { // évalue l’expressionpostfixée et affiche sa valeur sur écran.
-};
-*/
